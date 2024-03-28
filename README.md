@@ -147,3 +147,19 @@ When you select the conda environment named Acomys_comp_genomics, this looks lik
 ```bash
 singularity exec -B /home/jari/Documents/Github/Repo_minor_research_project:/home/jari/Documents/Github/Repo_minor_research_project --no-home acomys_conda_environments.sif bash -c "source /home/jari/miniconda3/bin/activate Acomys_comp_genomics && echo 'next command'"
 ```
+
+### Bind /home/jari/.cache
+
+Some operations in R require write permissions to the `/home/jari/.cache` directory in the singularity container. Because of the `--no-home` option, this permission is not available, causing these operations to fail. This is solved by also binding a host `.cache` directory to the `/home/jari/.cache` directory in the singularity container.
+
+For example, I mounted the host `/home/jari/.cache` directory to the singularity `/home/jari/.cache` directory, allowing the container to write directories or files to the `/home/jari/.cache` directory.
+
+```bash
+singularity exec -B /home/jari/Documents/Github/Repo_minor_research_project:/home/jari/Documents/Github/Repo_minor_research_project,/home/jari/.cache --no-home acomys_conda_environments.sif bash -c "source /home/jari/miniconda3/bin/activate Acomys_comp_genomics && echo 'next command'"
+```
+
+if the host *.cache* directory is another path, like `/home/john/.cache`, then the command would look a bit different.
+
+```bash
+singularity exec -B /home/jari/Documents/Github/Repo_minor_research_project:/home/jari/Documents/Github/Repo_minor_research_project,/home/john/.cache:/home/jari/.cache --no-home acomys_conda_environments.sif bash -c "source /home/jari/miniconda3/bin/activate Acomys_comp_genomics && echo 'next command'"
+```
