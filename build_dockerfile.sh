@@ -9,6 +9,9 @@ cd $(pwd)
 # create the envs folder
 mkdir -p envs
 
+# get version
+version="version3.0"
+
 # Copy the conda environments that you want in the container to the envs folder
 conda_envs=(/home/jari/miniconda3/envs/Acomys_comp_genomics \
             /home/jari/miniconda3/envs/kaleido_env \
@@ -20,9 +23,13 @@ do
 done
 
 # build the container
-docker build -f Dockerfile -t "jarivdiermen/acomys_conda_environments" .
+docker build -f Dockerfile -t "jarivdiermen/acomys_conda_environments":${version} .
+
+# Add docker tags for latest version
+docker tag jarivdiermen/acomys_conda_environments:${version} jarivdiermen/acomys_conda_environments:latest
 
 # push container to dockerhub
+docker push jarivdiermen/acomys_conda_environments:${version}
 docker push jarivdiermen/acomys_conda_environments:latest
 
 # rm the envs folder when it is now longer needed
